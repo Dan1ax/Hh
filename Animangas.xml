@@ -7,14 +7,14 @@
             <AdTitle>intro </AdTitle>
             <Creatives>
                 <Creative id="2" sequence="1">
-                    <Linear skipoffset="00:00:04">
+                    <Linear skipoffset="00:00:06">
                         <Duration>00:00:06</Duration>
                         <VideoClicks>
                             <ClickThrough id="blog"><![CDATA[#]]></ClickThrough>
                             <CustomClick>#</CustomClick>
                         </VideoClicks>
                         <MediaFiles>
-                            <MediaFile id="3" delivery="progressive" type="video/mp4" scalable="1" maintainAspectRatio="1" codec="0" apiFramework="VAST"><![CDATA[https://archive.org/serve/lv_0_20240518220232/lv_0_20240518220232.mp4]]></MediaFile>
+                            <MediaFile id="6" delivery="progressive" type="video/mp4" scalable="1" maintainAspectRatio="1" codec="0" apiFramework="VAST"><![CDATA[https://archive.org/serve/lv_0_20240518220232/lv_0_20240518220232.mp4]]></MediaFile>
                         </MediaFiles>
                     </Linear>
                 </Creative>
