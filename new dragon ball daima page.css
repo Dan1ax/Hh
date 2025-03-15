@@ -1,0 +1,1250 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0); /* Fondo completamente transparente */
+  }
+      body {
+          margin: 0;
+          padding: 0;
+          background-color: black;
+          color: white;
+          max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+      }
+
+  /* Estilo general del contenedor del video */
+/* Estilo general del contenedor del video */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #000 !important; /* Fondo oscuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+
+
+
+
+/* Fondo negro para la etapa de carga inicial del video */
+.video-js .vjs-poster,
+.video-js .vjs-tech {
+  background-color: #000 !important;
+  z-index: 1;
+}
+
+
+
+/* Overlay para la imagen vertical */
+.portrait-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  background: linear-gradient(to bottom, #000000ce, #00000000, #00000000, #000000da, #000000, #000000),
+              url('https://image.tmdb.org/t/p/original/73rGI735Tzf5ohSBh4rE06uyVyD.jpg') no-repeat top center;
+  background-size: contain;
+  z-index: 250; /* Asegura que esté sobre el video */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  opacity: 1; /* Visible inicialmente */
+  transition: opacity 0.5s ease-in-out; /* Transición suave */
+}
+
+/* Overlay para la imagen horizontal */
+.horizontal-overlay {
+  display: none; /* Oculta por defecto en portrait */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  background-size: contain;
+  z-index: 150; /* Asegura que esté sobre el video */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  opacity: 0; /* Invisible inicialmente */
+  transition: opacity 0.5s ease-in-out; /* Transición suave */
+  pointer-events: none; /* Evita interacciones cuando está invisible */
+}
+
+/* Fondo desenfocado + primer gradiente */
+.horizontal-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+      linear-gradient(to bottom, #000000c4, #00000071, #00000071, #000000c4, #000000d7, #000000),
+      url('https://image.tmdb.org/t/p/original/sDJq5MzV5ck2iPbu5MvSrfCsmmL.jpg') no-repeat center center;
+  background-size: cover;
+  filter: blur(5px); /* Desenfoque para la imagen */
+  z-index: 1; /* El fondo desenfocado estará debajo de la imagen */
+}
+
+/* Gradiente encima de la imagen desenfocada */
+.horizontal-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, #000000ce, #00000000, #00000000, #000000da, #000000, #000000);
+  z-index: 2; /* Gradiente encima de la imagen desenfocada */
+}
+
+/* Imagen principal superpuesta */
+.horizontal-overlay img {
+  top: 0;
+  position: absolute; /* Asegura la superposición sobre el fondo */
+  width: 100%;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  object-fit: contain; /* Mantiene las proporciones */
+  z-index: 1; /* Imagen detrás del gradiente */
+  padding: 10px; /* Opcional: un poco de separación visual */
+  border-radius: 10px; /* Opcional: bordes redondeados */
+}
+
+/* Gradiente encima de la imagen nítida */
+.horizontal-overlay img::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  background: linear-gradient(to bottom, #000000ce, #00000000, #00000000, #000000da, #000000, #000000);
+  z-index: 3; /* Gradiente encima de la imagen nítida */
+  pointer-events: none; /* Permite que la imagen sea clickeable sin interferencia del gradiente */
+}
+
+/* Mostrar y ocultar las capas según la orientación */
+@media (orientation: landscape) {
+  .portrait-overlay {
+      display: none; /* Oculta el overlay vertical en landscape */
+  }
+
+  .horizontal-overlay {
+      display: flex; /* Muestra el overlay horizontal */
+      opacity: 1; /* Hace visible la imagen horizontal */
+      pointer-events: auto; /* Permite interacciones en modo landscape */
+  }
+}
+
+@media (orientation: portrait) {
+  .portrait-overlay {
+      display: flex; /* Asegura que el overlay vertical esté visible */
+      opacity: 1; /* Visible */
+  }
+
+  .horizontal-overlay {
+      display: none; /* Oculta completamente la imagen horizontal en portrait */
+  }
+}
+
+/* Mostrar la imagen correcta según la orientación */
+@media screen and (orientation: portrait) {
+  .portrai/* Estilo general de las tabs */
+.tabs {
+  display: flex;
+  justify-content: flex-start; /* Alineación a la izquierda */
+  align-items: center;
+  background-color: transparent; /* Fondo transparente */
+  padding: 10px 15px; /* Espaciado para separar de los márgenes */
+  margin-top: 155%; /* Espaciado entre la imagen principal y las tabs */
+  gap: 60px; /* Separación entre tabs */
+  border-bottom: 1px solid #525252; /* Línea divisoria */
+  z-index: 70000; /* Por encima de ambas imágenes */
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 15px 0;
+  cursor: pointer;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: rgb(129, 129, 129);
+  font-weight: bold;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.tab-button.active {
+  color: rgb(247, 247, 247); /* Color naranja para la pestaña activa */
+  border-bottom: 3px solid rgb(255, 0, 0); /* Línea inferior */
+}
+
+/* Estilo del contenido de las tabs */
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  z-index: 400;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+
+
+}
+
+@media screen and (orientation: landscape) {
+  .portrait-overlay {
+      display: none;
+  }
+  .horizontal-overlay {
+      display: flex;
+  }
+  #season-buttons {
+      position: absolute;
+      top: 10%; /* Ajuste para la parte superior */
+      left: 5%;
+      z-index: 600; /* Asegura visibilidad */
+  }
+  #episode-list {
+      position: absolute;
+      top: 20%; /* Ajuste superior para mayor espacio */
+      left: 5%;
+      z-index: 500; /* Por encima del fondo pero detrás de botones superiores */
+  }
+}
+
+
+.video-js {
+  width: 100%;
+  height: 500px; /* Ajusta la altura del reproductor */
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+}
+
+/* Ajustes responsivos */
+@media screen and (max-width: 768px) {
+  .video-js {
+      height: 300px; /* Ajusta la altura del reproductor en pantallas pequeñas */
+  }
+}
+
+     /* Control bar más arriba */
+.vjs-control-bar {
+  background-color: rgba(0, 0, 0, 0) !important; /* Semi-transparente */
+  position: absolute;
+  bottom: 10%; /* Ajustar hacia arriba, dentro del reproductor */
+  transition: all 0.3s ease;
+  z-index: 5;
+  padding: 0 10px;
+}
+
+/* Barra de progreso más visible y roja */
+.vjs-progress-control {
+  width: 100% !important; /* Expandir al ancho completo */
+  height: 6px; /* Grosor de la barra */
+  margin-top: -20px; /* Subir la barra ligeramente */
+  position: absolute;
+  bottom: 50px; /* Colocar encima de los controles */
+  background-color: transparent !important; /* Fondo transparente */
+  left: 0px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.vjs-play-progress {
+  background-color: #ff0000 !important; /* Cambiar el color de progreso a rojo */
+}
+
+.vjs-progress-holder {
+  background-color: rgba(146, 146, 146, 0.6) !important; /* Fondo de la barra */
+}
+
+/* Display time más arriba */
+.vjs-time-control {
+  position: absolute;
+  bottom: 50px; /* Encima de la barra de progreso */
+  left: -10px;
+  color: rgb(255, 255, 255); /* Texto blanco semi-transparente */
+  font-size: 25px;
+}
+
+/* Mostrar control bar solo al pasar el mouse */
+.video-js:hover .vjs-control-bar {
+  opacity: 1;
+}
+
+.video-js .vjs-control-bar {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Personalizar botones */
+.vjs-button {
+  color: white;
+  font-size: 1.5em;
+}
+
+/* Controles personalizados */
+.vjs-custom-controls {
+  position: absolute;
+  top: 40%; /* Centrado vertical */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  z-index: 10;
+}
+
+
+
+      .video-js:hover .vjs-control-bar {
+          opacity: 1;
+      }
+
+      .video-js .vjs-control-bar {
+          opacity: 0;
+      }
+
+      .vjs-picture-in-picture-control {
+          display: none !important;
+      }
+
+      .vjs-custom-controls {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 40px;
+          z-index: 10;
+      }
+
+      .vjs-custom-controls button {
+          background-color: rgba(255, 255, 255, 0);
+          border: none;
+          color: white;
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          font-size: 24px;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
+          transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .vjs-custom-controls button:hover {
+          background-color: rgba(255, 255, 255, 0);
+          transform: scale(1.1);
+      }
+
+      .material-icons {
+          font-size: 36px;
+      }
+
+      /* Estilo para el botón de temporadas */
+#season-buttons {
+  display: flex;
+  align-items: center;
+  margin-left: 0px;
+  position: relative;
+  bottom: 10px;
+  border-bottom: 1px solid #525252; /* Línea divisoria */
+  z-index: 600; /* Asegura que esté por encima de la imagen */
+}
+
+/* Lista de episodios */
+#episode-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px;
+  position: absolute; /* Posición absoluta para moverla hacia abajo */
+  bottom: 5%; /* Un poco más abajo que el botón de temporada */
+  left: 0%;
+  top: 750px;
+  z-index: 500; /* Asegura que esté por encima de la imagen */
+}
+
+#episode-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  border-left: 5px solid transparent;
+  border-bottom: none;
+  margin-left: 10px;
+}
+
+/* Estilo para la lista de temporadas */
+.season-dropdown {
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin-top: 100px;
+  border: none;
+  border-radius: 8px;
+  background-color: #0000001c;
+  position: absolute;
+  z-index: 900;
+  width: 200px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+  left: 10px;
+}
+
+.season-dropdown li {
+  padding: 8px;
+  cursor: pointer;
+  background-color: #000000de;
+  z-index: 1000;
+}
+
+/* Botón de temporadas */
+.season-button {
+  background-color: transparent;
+  border: none;
+  color: rgb(255, 255, 255);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.season-button .material-icons {
+  margin-right: -5px;
+}
+
+/* Modo horizontal: ajustes */
+@media (orientation: landscape) {
+  #season-buttons {
+      position: absolute;
+      top: 100%; /* Mueve el botón hacia arriba */
+      left: 5%; /* Mueve el botón hacia la izquierda */
+      border-bottom: none; /* Eliminamos temporalmente la línea del contenedor */
+      width: calc(100% - 10%); /* Asegura que la línea no se corte */
+  }
+
+  #season-buttons::after {
+      content: ""; /* Agrega la línea como pseudo-elemento */
+      position: absolute;
+      bottom: -20px; /* Coloca la línea debajo del botón */
+      left: 0;
+      width: 100%; /* La línea abarca el ancho del contenedor */
+      height: 1px;
+      background-color: #525252; /* Color de la línea divisoria */
+      width: calc(100% - 10%); /* Asegura que la línea no se corte */
+  }
+
+}
+
+
+      /* Ocultar el botón de play en la esquina superior izquierda */
+      .video-js .vjs-big-play-button {
+          display: none !important;
+      }
+
+      #episode-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  top: 95%;
+  margin-bottom: 50px; /* Añade espacio debajo del contenedor */
+  position: relative; /* Asegura que el contenedor no esté fijo */
+}
+
+.season-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.episode-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+}
+
+.episode {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.episode-thumbnail {
+  position: relative;
+}
+
+.progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 93%;
+  height: 5px;
+  background-color: #e0e0e000;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%; /* Inicialmente vacío */
+  background-color: red; /* Color del progreso */
+  transition: width 0.3s ease;
+}
+
+.episode-image {
+  width: 150px;
+          height: auto;
+          margin-right: 12px;
+          position: relative;
+          transition: filter 0.3s ease;
+}
+
+.episode-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.episode-title {
+  flex-grow: 1;
+          position: relative;
+          font-size: 12px;
+          font-weight: bold;
+          top: -10px;
+          left: -10px;
+}
+
+.episode-duration {
+  position: absolute;
+          bottom: 20px;
+          right: 170px;
+          background-color: rgba(0, 0, 0, 0.7);
+          color: white;
+          padding: 2px 5px;
+          font-size: 12px;
+          border-radius: 3px;
+}
+/* Modo horizontal: solo modificar en este modo */
+@media (orientation: landscape) {
+  #episode-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Tres columnas de igual tamaño */
+      gap: 1rem; /* Espacio entre las columnas */
+      margin: 0 auto;
+      margin-top: 50%; /* Espaciado superior más pequeño */
+      margin-bottom: 100px; /* Espaciado inferior */
+      padding: 10px;
+      max-width: 90%; /* Asegura que no se salga de la página */
+      margin-left: 0%;
+      right: 5%;
+      box-sizing: border-box; /* Asegura que los márgenes se apliquen correctamente */
+  }
+
+  /* Los episodios ahora se organizan en una columna para el modo horizontal */
+  .episode-item {
+      display: flex;
+      flex-direction: column; /* Cambiar a columna para apilar imagen, título y duración */
+      align-items: center; /* Centra los elementos */
+      text-align: center; /* Centra el texto */
+      justify-content: space-between; /* Asegura que los elementos estén distribuidos sin que se superpongan */
+  }
+
+  /* Imagen del episodio */
+  .episode-image {
+      width: 120px;
+          height: auto;
+      object-fit: cover; /* Mantiene la proporción de la imagen sin deformarse */
+      margin-bottom: 10px; /* Espaciado debajo de la imagen */
+  }
+
+  /* Información del episodio */
+  .episode-info {
+      display: block;
+      margin-top: 10px;
+      text-align: center; /* Centra el texto */
+      max-width: 150px; /* Asegura que los elementos no excedan el ancho de la imagen */
+  }
+
+  /* Título del episodio */
+  .episode-title {
+      font-size: 12px;
+      margin-bottom: 5px;
+      white-space: normal;
+      word-wrap: break-word;
+  }
+
+  /* Duración del episodio */
+  .episode-duration {
+      font-size: 12px;
+      margin-bottom: 10px;
+  }
+
+  /* Botón de descarga */
+  .download_link {
+      margin-top: 10px;
+  }
+}
+
+
+
+
+
+
+.download_link {
+  color: white;
+  background-color: transparent; /* Fondo transparente */
+  font-size: 17px;
+  cursor: pointer;
+  text-decoration: none; /* Quita el subrayado del texto */
+  border: none;
+  display: flex;
+  align-items: center;
+  margin-left: 110px; /* Empuja el botón de descarga hacia la derecha */
+  text-decoration: underline;
+}
+
+.download_link .material-icons {
+  font-size: 20px; /* Tamaño del ícono */
+  margin-left: 5px; /* Espaciado entre texto y el ícono */
+}
+
+
+.video-js .vjs-title {
+  position: absolute;
+  top: -300px; /* Ajusta según el diseño deseado */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0);
+  padding: 5px 10px;
+  border-radius: 4px;
+  z-index: 1000;
+  text-align: center;
+  max-width: 90%;
+  word-wrap: break-word;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .video-js .vjs-title {
+      font-size: 12px;
+      bottom: 50px; /* Ajustar para móviles */
+      max-width: 95%;
+  }
+}
+
+.vjs-back-button {
+  text-decoration: none; /* Elimina el subrayado de los enlaces */
+  position: absolute;
+  top: -80px; /* Ajusta la posición superior */
+  left: 10px; /* Ajusta la posición izquierda */
+  background-color: rgba(0, 0, 0, 0); /* Fondo transparente */
+  color: white;
+  border: none;
+  font-size: 20px; /* Tamaño del ícono */
+  width: 30px; /* Tamaño del botón */
+  height: 30px; /* Tamaño del botón */
+  border-radius: 50%; /* Forma circular */
+  display: flex;
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  cursor: pointer;
+  z-index: 1000; /* Asegurar que esté sobre otros elementos */
+  transition: background-color 0.3s;
+  line-height: 0; /* Elimina espacio extra debajo del ícono */
+  padding: 0; /* Elimina espacio interno adicional */
+}
+
+.vjs-back-button:hover {
+  background-color: rgba(255, 255, 255, 0); /* Fondo ligeramente visible al pasar el mouse */
+}
+
+.vjs-back-button .material-icons {
+  font-size: 35px; /* Tamaño del ícono */
+  line-height: 1; /* Elimina líneas adicionales alrededor del ícono */
+  margin: 0; /* Elimina márgenes */
+  padding: 0; /* Elimina relleno */
+}
+
+/* Botón de ajuste de pantalla */
+.vjs-screen-adjust-button {
+  position: absolute;
+  top: -95px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 16px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background-color 0.3s;
+  line-height: 1;
+  padding: 0;
+}
+
+.vjs-screen-adjust-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.vjs-screen-adjust-button .material-icons {
+  font-size: 30px;
+}
+
+/* Etiqueta del ajuste */
+.vjs-adjustment-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  z-index: 1001;
+  text-align: center;
+}
+
+.vjs-dark-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0; /* Transparente por defecto */
+  transition: opacity 0.3s ease-in-out; /* Suave transición */
+  pointer-events: none; /* Permitir interacción con el video */
+  z-index: 1; /* Asegurar que esté sobre el video pero debajo de los controles */
+}
+
+.vjs-skip-intro {
+  position: absolute;
+  bottom: 170px; /* Más arriba en la pantalla */
+  right: 70px;
+  background-color: rgb(50, 50, 50); /* Fondo gris sólido (más oscuro) */
+  color: white;
+  border: none;
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 15px 20px; /* Botón más grande */
+  font-size: 18px; /* Texto más grande */
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el botón */
+}
+
+.vjs-skip-intro:hover {
+  transform: scale(1.1); /* Ligeramente más grande al pasar el mouse */
+}
+
+.vjs-skip-intro:active {
+  transform: scale(1); /* Vuelve a su tamaño normal al hacer clic */
+}
+
+
+.vjs-next-episode {
+  position: absolute;
+  bottom: 170px; /* Más arriba en la pantalla */
+  right: 70px;
+  background-color: #323232; /* Fondo semi-transparente */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el botón */
+}
+
+.vjs-next-episode:hover {
+  transform: scale(1.1); /* Ligeramente más grande al pasar el mouse */
+}
+
+.vjs-next-episode:active {
+  transform: scale(1); /* Vuelve a su tamaño normal al hacer clic */
+}
+
+/* Estilo general de las tabs */
+.tabs {
+  display: flex;
+  justify-content: flex-start; /* Alineación a la izquierda */
+  align-items: center;
+  background-color: transparent; /* Fondo transparente */
+  padding: 10px 15px; /* Espaciado para separar de los márgenes */
+  margin-top: 158%; /* Espaciado entre la imagen principal y las tabs */
+  gap: 60px; /* Separación entre tabs */
+  border-bottom: 1px solid #525252; /* Línea divisoria */
+  z-index: 200;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 15px 0;
+  cursor: pointer;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: rgb(129, 129, 129);
+  font-weight: bold;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.tab-button.active {
+  color: rgb(247, 247, 247); /* Color naranja para la pestaña activa */
+  border-bottom: 3px solid rgb(255, 0, 0); /* Línea inferior */
+}
+
+
+
+/* Estilo del contenido de las tabs */
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  z-index: 400;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* Media Queries para móviles */
+@media (max-width: 768px) {
+  .tabs {
+      justify-content: flex-start; /* Alineación a la izquierda */
+      padding: 0 10px; /* Espaciado reducido en los laterales */
+      gap: 40px; /* Menor separación entre tabs */
+      z-index: 1000;
+  }
+
+  .tab-button {
+      font-size: 14px; /* Ajustar tamaño de texto para móviles */
+      padding: 5px 0; /* Espaciado reducido */
+  }
+}
+/* Ajustes para modo horizontal */
+@media (orientation: landscape) {
+  .tabs {
+      margin-top: 25%; /* Reduce el margen superior en modo horizontal */
+      position: absolute; /* Permite ajustar manualmente la posición */
+      top: 30%; /* Mueve las tabs hacia arriba */
+      left: 5%; /* Mueve las tabs ligeramente a la izquierda */
+      width: 90%; /* Asegura que no ocupen toda la pantalla */
+      z-index: 500;
+  }
+}
+
+
+/* Estilo general para el header */
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.13); /* Fondo semitransparente */
+  display: flex;
+  justify-content: space-between; /* Espacio entre los elementos */
+  align-items: center;
+  padding: 10px;
+  z-index: 1000; /* Asegura que el header esté por encima de otros elementos */
+  transition: top 0.3s ease-in-out; /* Transición para el título al hacer scroll */
+}
+
+/* Estilo de los enlaces */
+.icon-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff; /* Color del ícono */
+  text-decoration: none; /* Quitar subrayado */
+}
+
+/* Flecha a la izquierda */
+#back-link {
+  background-color: rgba(0, 0, 0, 0.2); /* Fondo semitransparente */
+  border-radius: 50%; /* Hace el fondo circular */
+  padding: 0;
+  width: 36px; /* Tamaño del círculo */
+  height: 36px;
+  font-size: 20px; /* Tamaño del ícono */
+}
+
+/* Estilo del botón cast */
+#cast-link {
+  background-color: transparent; /* Fondo transparente */
+  width: 24px; /* Ajusta el tamaño del área del ícono */
+  height: 24px;
+}
+
+#cast-link .material-icons {
+  font-size: 25px; /* Tamaño del ícono */
+}
+
+/* Título oculto por defecto */
+.page-title {
+  opacity: 0; /* Inicialmente invisible */
+ 
+transition: opacity 1s ease, transform 1s ease; /* Transición para desvanecer y mover */
+  font-size: 18px; /* Tamaño del texto del título */
+  color: white; /* Asegurarse de que sea visible sobre fondo oscuro */
+}
+/* Hover efectos */
+.icon-link:hover {
+  opacity: 0.8; /* Ligera transparencia al hacer hover */
+}
+
+
+/* Estilo para el contenedor del logo */
+#logo-container {
+  position: absolute;
+  top: 45%; /* Ajusta esta distancia según necesites */
+  left: 50%;
+  transform: translateX(-50%); /* Centra el contenedor */
+  text-align: center;
+  z-index: 300; /* Asegura que el logo esté por encima de otras imágenes */
+}
+
+/* Estilo del logo */
+#logo {
+  width: 200px; /* Tamaño del logo */
+  height: auto; /* Mantener la proporción */
+}
+
+/* Estilo para la información debajo del logo */
+#logo-info {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #fff; /* Color blanco para el texto */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px; /* Espacio entre los elementos */
+}
+
+#logo-info span {
+  font-weight: bold;
+}
+
+#logo-info .rating {
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+#logo-info .series-text {
+  color: #00ffc8; /* Color diferente para "Series" */
+}
+
+#logo-info .duration, #logo-info .year {
+  color: #ccc; /* Color gris para los otros textos */
+}
+
+.favorito-container {
+  position: absolute; /* Saca el botón del flujo normal */
+  top: 68%; /* Posición relativa al contenedor del logo */
+  left: 50%; /* Centra el botón horizontalmente */
+  transform: translateX(-50%); /* Ajusta la posición horizontal para centrarlo */
+  display: flex;
+  flex-direction: column; /* Ordena ícono y texto en columna */
+  align-items: center;
+  z-index: 300; /* Asegura que esté sobre las tabs */
+}
+
+
+#favoritoBtn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column; /* Ordena el contenido del botón en columna */
+  align-items: center; /* Centra el contenido horizontalmente */
+  justify-content: center; /* Centra el contenido verticalmente */
+}
+
+#favoritoIcon {
+  font-size: 30px; /* Tamaño del icono */
+  margin-bottom: 8px; /* Espacio entre el icono y el texto */
+}
+
+#favoritoText {
+  font-size: 14px; /* Tamaño del texto */
+  text-align: center; /* Centra el texto */
+  color: white;
+}
+
+/* Ajustes para dispositivos en modo horizontal */
+@media (orientation: landscape) {
+  #logo-container {
+      top: 10%; /* Mueve el logo más hacia arriba */
+      left: 30%; /* Mueve el logo hacia la izquierda */
+  }
+
+  .favorito-container {
+      top: 60%; /* Ajusta la posición hacia arriba */
+      left: 30%; /* Mueve hacia la izquierda */
+      z-index: 500;
+  }
+}
+
+.movie-grid {
+display: grid; /* Usamos grid layout */
+grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+gap: 10px; /* Espaciado pequeño entre tarjetas */
+padding: 15px;
+justify-content: center; /* Centra las columnas horizontalmente */
+}
+
+.card {
+width: 165px; /* Tarjetas más grandes */
+height: 250px; /* Aumenta la altura de las tarjetas */
+border-radius: 10px; /* Bordes redondeados */
+overflow: hidden; /* Asegura que las imágenes respeten los bordes */
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Sombra */
+}
+
+.card img {
+width: 100%;
+height: 100%;
+object-fit: cover; /* Ajusta las imágenes al contenedor */
+display: block;
+}
+
+
+
+
+/* Ajustes para pantallas en orientación horizontal */
+@media (orientation: landscape) {
+.poster {
+  margin-top: 350px;
+}
+.movie-grid {
+  grid-auto-flow: column; /* Organización horizontal en una fila */
+  grid-template-columns: unset; /* Desactiva el diseño de columnas predefinidas */
+  gap: 10px; /* Espaciado reducido entre imágenes */
+  overflow-x: auto; /* Scroll horizontal */
+  padding: 20px; /* Reduce el padding para compactar el diseño */
+  justify-content: start; /* Alinea las imágenes a la izquierda */
+  margin-top: 50%;
+}
+.card {
+  width: 130px; /* Tamaño ligeramente más pequeño en horizontal */
+  height: 195px;
+}
+}
+
+.footer {
+display: flex;
+align-items: center;
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+background-color: rgb(27, 27, 27);
+padding: 10px 0;
+height: 60px;
+z-index: 600000;
+justify-content: space-around;
+}
+
+.footer-icon {
+color: #bbb; /* Icono gris cuando está inactivo */
+text-align: center;
+text-decoration: none;
+font-size: 30px; /* Tamaño aumentado para los iconos */
+flex: 1; /* Ocupa el mismo espacio cada icono */
+display: flex;
+flex-direction: column;
+align-items: center;
+text-decoration: none;
+transition: color 0.3s ease, transform 0.3s ease; /* Animación suave al pasar el cursor */
+}
+
+.footer-icon p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #bbb;
+}
+
+.footer-icon.active p {
+  color: #ff5e00; /* Color destacado para la opción activa */
+}
+
+/* Para asegurarnos de que los iconos aumenten correctamente */
+.footer-icon .material-icons, .footer-icon .material-icons-outlined {
+font-size: inherit; /* Heredar el tamaño de fuente del contenedor */
+transition: font-size 0.3s ease;
+}
+
+.footer-icon:hover {
+color: #fff; /* Cambia a blanco al pasar el cursor */
+}
+
+.footer-icon.active {
+color: #ff5e00; /* Cambiar a blanco cuando está activo */
+}
+
+.footer-icon.active .material-icons-outlined {
+display: none; /* Oculta el icono outline cuando está activo */
+}
+
+.footer-icon.active .material-icons {
+display: inline-block; /* Muestra el icono normal cuando está activo */
+}
+
+/* Oculta los iconos normales por defecto */
+.footer-icon .material-icons {
+display: none;
+}
+
+/* Iconos outline por defecto */
+.footer-icon .material-icons-outlined {
+display: inline-block;
+}
+
+/* Estilos para el icono de perfil */
+.profile-icon-footer {
+width: 30px; /* Tamaño de la imagen de perfil */
+height: 30px; /* Tamaño de la imagen de perfil */
+border-radius: 50%; /* Hacer la imagen circular */
+border: 2px solid #bbb; /* Borde blanco por defecto */
+object-fit: cover; /* Asegura que la imagen se recorte bien */
+transition: border-color 0.3s ease; /* Transición suave para el borde */
+}
+
+/* Cambiar el color del borde cuando el icono esté activo */
+.footer-icon.active .profile-icon-footer {
+border-color: #ff5e00; /* Cambiar el borde a azul cuando esté activo */
+}
+
+
+/* Cambiar color de iconos inactivos */
+.footer-icon.inactive .material-icons-outlined,
+.footer-icon.inactive .material-icons {
+color: #bbb; /* Gris para iconos inactivos */
+}
+
+/* Overlay para oscurecer la página */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0); /* Oscurecimiento semitransparente */
+  z-index: 9999; /* Asegura que esté encima de todos los elementos */
+  opacity: 1;
+  transition: opacity 2s ease-out; /* Cambio lento en opacidad */
+  display: block; /* Asegura que el overlay esté visible inicialmente */
+}
+
+/* Cuando se ocultará */
+.overlay.hidden {
+  opacity: 0; /* Se desvanece */
+  pointer-events: none; /* Evita interacciones mientras está oculto */
+}
+
+/* Loader */
+#loader {
+  display: block; /* Visible al cargar */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: conic-gradient(
+      from 90deg,
+      #ff5e0025 0%,
+      #ff5e00 60%,
+      #ffffff 80%,
+      #afafaf00 30%
+  );
+  mask: radial-gradient(farthest-side, transparent calc(100% - 8px), black);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 8px), black);
+  animation: spin 1.2s linear infinite, shine 2s ease-in-out infinite;
+  opacity: 1 !important;
+  transition: opacity 3s ease-out;
+  z-index: 600000; /* Por encima de todo */
+}
+
+/* Animación de rotación */
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Animación de brillo */
+@keyframes shine {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.8); }
+}
+
+/* Deshabilitar selección de texto e interacciones */
+body, img, a, button, select, textarea {
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE10+/Edge */
+          user-select: none; /* estándar */
+      }
+
+      /* Deshabilitar resaltado en elementos interactivos */
+      a, button, select, textarea {
+          -webkit-tap-highlight-color: transparent; /* Safari */
+      
+      }
+
+      /* Deshabilitar el arrastre de imágenes */
+      img {
+          pointer-events: none; /* Desactiva interacciones del puntero en imágenes */
+      }
